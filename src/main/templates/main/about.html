@@ -1,0 +1,31 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/about_css.css" %}">
+
+{% endblock css %}
+
+{% block content %}
+    <h1 class="mt-sm-1 pt-5">Магазин книг<strong><img src="{% static "deps/images/icon.png" %}" width=40px> RED CAT</strong></h1>
+    <div class="container-md custom-shadow rounded mt-lg-2" id="about">
+    <br>
+    <h3>О магазине</h3>
+        <p>Частное торговое унитарное предприятие "RED CAT" г.Минск, ул. Мирошниченко, 11-236</p>
+        <p>Свидетельство 190908194 выдано 22.11.2007г. Администрацией Советского района г. Минска</p>
+        <p>УНП 190908194</p>
+        <p>Дата регистрации в Торговом реестре РБ: 13.03.2015г. за № 219032</p>
+        <p>Контактные телефоны: (029) 696-52-88; (033) 696-52-88; (017) 237-45-43</p>
+        <p>Адрес для почтовых отправлений: А/Я 116, 220002 Минск</p>
+    <br>
+    <div>
+{% endblock content %}
+
+{% block footer %}
+    <footer class="py-4 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Home Python Hub Studio 2023</p>
+        </div>
+    </footer>
+{% endblock footer %}

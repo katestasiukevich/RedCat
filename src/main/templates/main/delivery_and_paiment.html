@@ -1,0 +1,38 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/about_css.css" %}">
+
+{% endblock css %}
+
+{% block content %}
+    <h1 class="mt-sm-1 pt-5">Магазин книг<strong><img src="{% static "deps/images/icon.png" %}" width=40px> RED CAT</strong></h1>
+    <div class="container-md custom-shadow rounded mt-lg-2" id="about">
+    <br>
+    <h5>СПОСОБЫ ДОСТАВКИ</h5>
+    <ul>
+    <li>ЕВРОПОЧТА до двери вне г.Минска</li>
+    <li>ЕВРОПОЧТА по РБ до отделения вне Минска. Сумма заказа от 10 р. Доставка на сумму от 120 р. бесплатно. Все включено.</li>
+    <li>КУРЬЕР по г. Минску в пределах МКАД и м-н Уручье</li>
+    <li>КУРЬЕР за пределами МКАД до 10 км</li>
+    </ul>
+    <h5>СПОСОБЫ ОПЛАТЫ</h5>
+    <ul>
+    <li>Наличный расчёт</li>
+    <li>Пластиковые карты</li>
+    <li>Оплата через систему "Расчет" (ЕРИП). Счет выставляется после получения заказа на склад.</li>
+    <li>Оплата (только онлайн) картой банка VISA, MasterCard, БЕЛКАРТ или Apple Pay</li>
+    </ul>
+    <br>
+    <div>
+{% endblock content %}
+
+{% block footer %}
+    <footer class="py-4 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Home Python Hub Studio 2023</p>
+        </div>
+    </footer>
+{% endblock footer %}
