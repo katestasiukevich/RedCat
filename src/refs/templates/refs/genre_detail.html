@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block MAIN_CONTENT %}
+    <a href="{% url "references:genre-list" %}"><button>Назад к списку жанров</button></a>
+    <hr>
+    <h1 class="mt-5">О ЖАНРЕ</h1>
+    <ul>
+        <li><b>id</b>: {{object.id}}</li><br>
+        <li><b>имя</b>: {{object.name}}</li><br>
+        <li><b>описание</b>: {{object.description}}</li><br>
+    </ul>
+    {% if  perms.refs.change_genre %}
+    <a href="{% url "references:genre-update" object.id %}"><button>Редактировать</button></a>
+    {% endif %}
+    {% if  perms.refs.delete_genre %}
+    <a href="{% url "references:genre-delete" object.id %}"><button>Удалить</button></a>
+    {% endif %}
+{% endblock MAIN_CONTENT %}

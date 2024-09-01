@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/about_css.css" %}">
+
+{% endblock css %}
+
+
+{% block MAIN_CONTENT %}
+{% csrf_token %}
+
+<div class="card mb-3">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="{% static "deps/images/baseavatar.jpg" %}" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h2 class="card-title">{{object.first_name}} {{object.last_name}} ({{user.username}})</h2>
+            <p class="card-text"><b>Email</b>: {{object.email}}</li><br>
+            <p class="card-text"><b>Телефон</b>:
+                +375
+                {% if object.code %}
+                    ({{object.code}})
+                {% else %}
+                    (_ _)
+                {% endif %}
+                {% if object.phone %}{{object.phone}}{% else %}_ _ _  _ _  _ _{% endif %}</p>
+            <p class="card-text"><b>Город</b>:{% if object.city %} {{object.city}}{% else %}{% endif %}</p>
+            <p class="card-text"><b>Страна</b>:{% if object.country %} {{object.country}}{% else %}{% endif %}</p>
+            <p class="card-text"><b>Индекс</b>:{% if object.index %} {{object.index}}{% else %}{% endif %}</p>
+            <p class="card-text"><b>Адрес 1</b>:{% if object.address1 %} {{object.address1}}{% else %}{% endif %}</p>
+            <p class="card-text"><b>Адрес 2</b>:{% if object.address2 %} {{object.address2}}{% else %}{% endif %}</p>
+        <a href="{% url "accounts:profile-update" %}"><button class="btn btn-warning">Редактировать</button></a>
+          <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock MAIN_CONTENT %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block MAIN_CONTENT %}
+    <a href="{% url "references:publisher-list" %}"><button> ⭠ Назад к списку издательств</button></a>
+    <hr>
+    <h1 class="mt-5">ОБ ИЗДАТЕЛЬСТВЕ</h1>
+    <ul>
+        <li><b>id</b>: {{object.id}}</li><br>
+        <li><b>имя</b>: {{object.name}}</li><br>
+        <li><b>описание</b>: {{object.description}}</li><br>
+    </ul>
+    {% if  perms.refs.change_publisher %}
+    <a href="{% url "references:publisher-update" object.id %}"><button>Редактировать</button></a>
+    {% endif %}
+    {% if  perms.refs.delete_publisher %}
+    <a href="{% url "references:publisher-delete" object.id %}"><button>Удалить</button></a>
+    {% endif %}
+{% endblock MAIN_CONTENT %}

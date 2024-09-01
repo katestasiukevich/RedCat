@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/about_css.css" %}">
+
+{% endblock css %}
+{% block MAIN_CONTENT %}
+<a href="{% url "references:author-list" %}"><button class="btn btn-outline-warning text-black"> ⭠ Назад к списку авторов</button></a>
+<div class="card mb-3 rounded" >
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="{{ object.img.url }}" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h2 class="card-title">{{object.name}}</h2>
+          <p class="card-text">{{object.description}}</p>
+          <p class="card-text"><small class="text-body-secondary">    {% if  perms.refs.change_author %}
+            <a href="{% url "references:author-update" object.id %}"><button class="btn btn-outline-warning text-black"><i class="bi bi-pen"></i> Редактировать</button></a>
+            {% endif %}
+            {% if  perms.refs.delete_author %}
+            <a href="{% url "references:author-delete" object.id %}"><button class="btn btn-outline-danger"><i class="bi bi-trash3"></i> Удалить</button></a>
+            {% endif %}</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock MAIN_CONTENT %}

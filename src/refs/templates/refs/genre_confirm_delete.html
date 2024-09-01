@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block MAIN_CONTENT %}
+    <h1 class="mt-5">Вы действительно хотите удалить {{ object }}?</h1>
+    <form action="" method="post" required >
+        {% csrf_token %}
+        <button type="submit">Удалить</button>
+        <a href="{% url "references:genre-detail" object.id %}"><button type="button">Отменить</button></a>
+    </form>
+{% endblock MAIN_CONTENT %}

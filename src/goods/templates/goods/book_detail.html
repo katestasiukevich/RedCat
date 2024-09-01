@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block MAIN_CONTENT %}
+
+    <a href="{% url "goods:book-list" %}"> ⭠ Назад к списку книг</a>
+    <h1 class="mt-5">О КНИГЕ</h1>
+    {% if object.cover %}
+        <img src="{{ object.cover.url }}" alt="{{object.title}}">
+    {% else %}
+        <img src="{% static "deps/images/Not found image.png" %}">
+    {% endif %}
+        <ul>
+            <li><b>id</b>: {{object.id}}</li><br>
+            <li><b>Название</b>: {{object.title}}</li><br>
+            <li><b>Автор</b>:
+                {% for obj in object.author.values%}
+                <ul>
+                    <li>{{obj.name}}</li>
+                </ul>
+            {% endfor %}
+            </li><br>
+            <li><b>Жанр</b>: 
+                {% for obj in object.genre.values%}
+                    <ul>
+                        <li>{{obj.name}}</li>
+                    </ul>
+                {% endfor %}
+            </li><br>
+            <li><b>Серия</b>: <a href="{% url "references:series-detail" object.series.id %}" class="no_buton_link">{{object.series.name}}</a></li>
+            <li><b>Издательство</b>: {{object.publisher.name}}</li><br>
+            <li><b>Описание</b>:
+                {% if object.description %}
+                    {{object.description}}
+                {% else %}
+                    Нет описания.
+                {% endif %}
+            </li><br>
+            <li><b>Цена</b>: {{object.price}} BYN</li><br> 
+        </ul>
+        {% if  perms.goods.change_book %}
+            <a href="{% url "goods:book-update" object.id %}"><button>Редактировать</button></a>
+        {% endif %}
+        {% if  perms.goods.delete_book %}                
+            <a href="{% url "goods:book-delete" object.id %}"><button>Удалить</button></a>
+        {% else %}
+            <form action="{% url "orders:add-item-to-cart" %}" method="post">
+                {% csrf_token %}
+                <label class="form-label">Количество</label>
+                <input type="hidden" name="item_id" value="{{object.id}}">
+                <input type="number" name="quantity" step="1" min="1" >
+                <button type="submit" class="btn btn-warning"><i class="bi bi-cart4"></i></button>
+            </form>
+        {% endif %}
+{% endblock MAIN_CONTENT %}

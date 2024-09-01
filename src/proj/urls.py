@@ -16,11 +16,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from main import views
+from django.conf.urls.static import static
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LogoutView
+from . import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.index, name="index"),
-    path('main/', include("main.urls", namespace="main")),
+    path('s-admin/', admin.site.urls, name="index"),
+    path('', include("main.urls", namespace="main")),
+    path('catalog/', include("goods.urls", namespace="catalog")),
+    path('refs/', include("refs.urls", namespace="references")),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('accounts/', include("acc.urls", namespace="accounts")),
 
 ]
+
+if settings.DEBUG:
+
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += (path('__debug__/', include("debug_toolbar.urls")),)

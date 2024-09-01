@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block MAIN_CONTENT %}
+{% if  perms.refs.add_genre %}
+    <a href="{% url "references:genre-create" %}"><button class="btn btn-warning">Добавить новый жанр</button></a><br>
+    {% endif %}
+        <table class="table table-hover" border="1">
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th colspan="3">Действия</th>
+            </tr>
+            {% for obj in object_list %}
+            <tr>
+                <td>{{obj.id}}</td>
+                <td>{{obj.name}}</td>
+                <td class="link">
+                    <a href="{% url "references:genre-detail" obj.id %}"><button class="btn btn-success"><i class="bi bi-eye"></i></button></a>
+                </td>
+                {% if  perms.refs.change_genre %}
+                <td class="link">
+                    <a href="{% url "references:genre-update" obj.id %}"><button class="btn btn-warning"><i class="bi bi-pencil-square"></i></button></a>
+                </td>
+                {% endif %}
+                {% if  perms.refs.delete_genre %}
+                <td class="link">
+                    <a href="{% url "references:genre-delete" obj.id %}"><button class="btn btn-danger"><i class="bi bi-trash"></i></button></a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+{% endblock MAIN_CONTENT %}

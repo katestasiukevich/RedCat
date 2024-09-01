@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block MAIN_CONTENT %}
+    <a href="{% url "references:series-list" %}"><button> ⭠ Назад к списку серий</button></a>
+    <hr>
+    <h1 class="mt-5">О СЕРИИ</h1>
+    <ul>
+        <li><b>id</b>: {{object.id}}</li><br>
+        <li><b>название</b>: {{object.name}}</li><br>
+        <li><b>описание</b>: {{object.description}}</li><br>
+    </ul>
+    {% if  perms.refs.change_series %}
+    <a href="{% url "references:series-update" object.id %}"><button>Редактировать</button></a>
+    {% endif %}
+    {% if  perms.refs.delete_series %}
+    <a href="{% url "references:series-delete" object.id %}"><button>Удалить</button></a>
+    {% endif %}
+{% endblock MAIN_CONTENT %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block MAIN_CONTENT %}
+    <h1 class="mt-5"> {{ headline }} </h1>
+    <form action="" method="post" required >
+        {% csrf_token %}
+        {{ form|crispy}}
+        <button type="submit">Сохранить</button>
+        <a href="{% url "references:genre-list" %}"><button type="button">Выйти без изменений</button></a>
+    </form>
+    <br>
+    <br>
+{% endblock MAIN_CONTENT %}

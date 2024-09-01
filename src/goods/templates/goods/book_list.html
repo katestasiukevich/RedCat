@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block MAIN_CONTENT %}
+{% if  perms.goods.add_book %}
+<a href="{% url "goods:book-create" %}"><button class="btn btn-warning">Добавить книгу</button></a><br>
+{% endif %}
+<table class="table table-hover" border="1">
+    <tr>
+        <th>Обложка</th>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Автор</th>
+        <th>Жанр</th>
+        <th>Цена</th>
+        <th colspan="3">Действия</th>
+    </tr>
+    {% for obj in object_list %}
+    <tr>
+        {% if obj.cover %}
+            <td><img src="{{obj.cover.url}}" width=70px  alt="{{obj.title}}"></td>
+        {% else %}
+            <img src="{% static "deps/images/Not found image.png" %}">
+        {% endif %}
+        <td>{{obj.id}}</td>
+        <td>{{obj.title}}</td>
+        <td>
+            {% for gen in obj.author.values%}
+            <ul>
+                <li>{{gen.name}}</li>
+            </ul>
+            {% endfor %}
+        </td>
+        <td>
+            {% for gen in obj.genre.values%}
+            <ul>
+                <li>{{gen.name}}</li>
+            </ul>
+            {% endfor %}
+        </td>
+        <td>{{obj.price}} BYN</td>
+        <td class="link">
+            <a href="{% url "goods:book-detail" obj.id %}"><button class="btn btn-success"><i class="bi bi-eye"></i></button></a>
+        </td>
+        {% if  perms.goods.change_book %}
+            <td class="link">
+                <a href="{% url "goods:book-update" obj.id %}"><button class="btn btn-warning"><i class="bi bi-pencil-square"></i></button></a>
+            </td>
+        {% endif %}
+        {% if  perms.goods.delete_book %}
+        <td class="link">
+            <a href="{% url "goods:book-delete" obj.id %}"><button class="btn btn-danger"><i class="bi bi-trash"></i></button></a>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock MAIN_CONTENT %}
