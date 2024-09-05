@@ -1,54 +1,106 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block modal_cart %}
+{% include "includes/cart_button.html" %}
+{% endblock modal_cart %}
+
 {% block MAIN_CONTENT %}
 
-    <a href="{% url "goods:book-list" %}"> ⭠ Назад к списку книг</a>
-    <h1 class="mt-5">О КНИГЕ</h1>
-    {% if object.cover %}
-        <img src="{{ object.cover.url }}" alt="{{object.title}}">
-    {% else %}
-        <img src="{% static "deps/images/Not found image.png" %}">
-    {% endif %}
-        <ul>
-            <li><b>id</b>: {{object.id}}</li><br>
-            <li><b>Название</b>: {{object.title}}</li><br>
-            <li><b>Автор</b>:
-                {% for obj in object.author.values%}
-                <ul>
-                    <li>{{obj.name}}</li>
-                </ul>
-            {% endfor %}
-            </li><br>
-            <li><b>Жанр</b>: 
-                {% for obj in object.genre.values%}
-                    <ul>
-                        <li>{{obj.name}}</li>
-                    </ul>
-                {% endfor %}
-            </li><br>
-            <li><b>Серия</b>: <a href="{% url "references:series-detail" object.series.id %}" class="no_buton_link">{{object.series.name}}</a></li>
-            <li><b>Издательство</b>: {{object.publisher.name}}</li><br>
-            <li><b>Описание</b>:
-                {% if object.description %}
-                    {{object.description}}
-                {% else %}
-                    Нет описания.
-                {% endif %}
-            </li><br>
-            <li><b>Цена</b>: {{object.price}} BYN</li><br> 
-        </ul>
-        {% if  perms.goods.change_book %}
-            <a href="{% url "goods:book-update" object.id %}"><button>Редактировать</button></a>
-        {% endif %}
-        {% if  perms.goods.delete_book %}                
-            <a href="{% url "goods:book-delete" object.id %}"><button>Удалить</button></a>
-        {% else %}
-            <form action="{% url "orders:add-item-to-cart" %}" method="post">
-                {% csrf_token %}
-                <label class="form-label">Количество</label>
-                <input type="hidden" name="item_id" value="{{object.id}}">
-                <input type="number" name="quantity" step="1" min="1" >
-                <button type="submit" class="btn btn-warning"><i class="bi bi-cart4"></i></button>
-            </form>
-        {% endif %}
+        <a href="{% url "goods:book-list" %}"> ⭠ Назад к списку книг</a>
+        
+        <div class="container mt-5">
+        <div class="card mb-3 custom-shadow">
+            <div class="row g-0">
+                
+              <div class="col-md-4">
+                <img src="{{ book.cover.url }}" class="img-thumbnail" data-bs-toggle="modal" data-bs-target="#imageModal1">
+                
+                <div class="card-body"> 
+                    <div class="d-flex justify-content-between">
+                        {% if book.discount %}
+                            <p><s>{{ book.price }}</s> BYN</p>
+                            <p><font color="green"><strong>{{ book.sell_price}} BYN</strong></font></p>
+                            <span class="badge bg-warning text-dark">Скидка {{ book.discount }} %</span>
+                        {% else %}
+                            <p><strong>{{ book.price }}</strong></p>
+                        {% endif %}
+                    </div>
+                    
+                    <p class="card-text small"><small class="text-body-secondary">Последние изменения {{ book.updated }}</small><br>
+                                                <small class="text-body-secondary">Дата добавления {{ book.created }}</small>
+                    </p>
+                </div>
+              </div>
+              <div class="modal fade" id="imageModal1" tabindex="-1"
+                aria-labelledby="imageModal1Label" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="imageModal1Label">{{ book.name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="{{ book.cover.url }}"
+                                class="img-fluid" alt="Изображение 1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h3 class="card-title">"{{book.title}}"</h3>
+                  <h5 text-black-50>
+                    
+                    {% for obj in object.author.values%}
+                    <a href="{% url "references:author-detail" obj.id %}">
+                            {{obj.name}}
+                    </a>
+                    {% endfor %}
+                  </h5>
+
+                    <p class="card-text">{% if book.description %} {{book.description}}{% else %}{% endif %}</p>
+                    <p class="card-text"><b>Жанр(ы)</b>:
+                        {% for obj in object.genre.values%}
+                            {{obj.name}}
+                        {% endfor %}
+                    </p>
+                    <p class="card-text"><b>Издательство</b>:{% if book.publisher %} {{book.publisher}}{% else %}{% endif %}</p>
+                    <p class="card-text"><b>Страниц</b>:{% if book.pages %} {{book.pages}}{% else %}{% endif %}</p>
+                    <p class="card-text"><b>Год издания</b>:{% if book.year %} {{book.year}}{% else %}{% endif %}</p>
+                    <p class="card-text"><b>Формат</b>:{% if book.book_format %} {{book.book_format}}{% else %}{% endif %}</p>
+                    <p class="card-text"><b>Вес</b>:{% if book.weight %} {{book.weight}}{% else %}{% endif %}</p>
+                    <p class="card-text"><b>Возрастные ограничения</b>:{% if book.age_restrictions %} {{ book.age_restrictions }}{% else %}{% endif %}</p>
+                    <p class="card-text"><b>Переплёт</b>:{% if book.binding %} {{ book.binding }}{% else %}{% endif %}</p>
+                    <p class="card-text"><b>ISBN</b>:{% if book.isbn %} {{ book.isbn }}{% else %}{% endif %}</p>
+                    <p class="card-text"><b>Вес</b>:{% if book.weight %} {{book.weight}}{% else %}{% endif %}</p>
+                    <p class="card-text"><b>Остаток</b>:{% if book.stock %} {{book.stock}}{% else %}{% endif %}</p>
+                    
+                    {% if  perms.goods.change_book %}
+                        <a href="{% url "goods:book-update" book.slug %}"><button class="btn btn-outline-warning text-black">Редактировать</button></a>
+                    {% endif %}
+                    {% if  perms.goods.delete_book %}                
+                        <a href="{% url "goods:book-delete" object.slug %}"><button class="btn btn-outline-danger">Удалить</button></a>
+                    {% comment %} {% else %}
+                        <form action="{% url "cart:cart_add" %}" method="post">
+                            {% csrf_token %}
+                            <label class="form-label">Количество</label>
+                            <input type="hidden" name="item_id" value="{{object.id}}">
+                            <input type="number" name="quantity" step="1" min="1" >
+                            <button type="submit" class="btn btn-warning"><i class="bi bi-cart4"></i></button>
+                        </form> {% endcomment %}
+                    {% endif %}
+                    <a href="{% url "cart:cart_add" %}" class="btn btn-dark add-to-cart"
+                    data-book-id="{{ book.id }}">
+                        {% csrf_token %}
+                        Добавить в корзину</a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+             
 {% endblock MAIN_CONTENT %}
+

@@ -24,7 +24,7 @@ RESTRICTION_CHOICES = (
 )
 
 class Book(models.Model):
-    category = models.ForeignKey(Categories, on_delete=models.PROTECT, related_name='products', verbose_name="Категория")
+    category = models.ForeignKey(Categories, on_delete=models.PROTECT, related_name='books', verbose_name="Категория")
     title = models.CharField(
         verbose_name="Название книги", max_length=200, auto_created=False, db_index=True
     )
@@ -80,7 +80,7 @@ class Book(models.Model):
         return f"{self.title} количество - {self.quantity}"
 
     def get_absolute_url(self):
-        return reverse_lazy("goods:book-detail", kwargs={"pk": self.pk})
+        return reverse_lazy("catalog:book-detail", kwargs={"slug": self.slug})
     
     def display_id(self):
         return f"{self.pk:05}"

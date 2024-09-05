@@ -38,15 +38,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
     'crispy_forms',
     'crispy_bootstrap5',
-    
-    'debug_toolbar',
 
-    'acc',
     'main',
     'goods',
     'refs',
+    'users',
+    'carts',
+    'orders'
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -66,9 +66,9 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 ROOT_URLCONF = 'proj.urls'
 
-LOGIN_REDIRECT_URL = reverse_lazy('accounts:profile-create')
-LOGIN_URL = reverse_lazy('login')
-LOGOUT_URL = reverse_lazy('logout')
+# LOGIN_REDIRECT_URL = reverse_lazy('accounts:profile-create')
+# LOGIN_URL = reverse_lazy('login')
+# LOGOUT_URL = reverse_lazy('logout')
 
 TEMPLATES = [
     {
@@ -94,11 +94,21 @@ WSGI_APPLICATION = 'proj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'redcat',
+        'USER': 'redcat',
+        'PASSWORD': '1234567!',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": BASE_DIR / "cache",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -152,3 +162,7 @@ INTERNAL_IPS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.User'
+LOGIN_URL = '/user/login/'
+LOGIN_REDIRECT_URL = '/'

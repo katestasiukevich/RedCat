@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block MAIN_CONTENT %}
-{% if  perms.goods.add_book %}
+{% comment %} {% if  perms.goods.add_book %} {% endcomment %}
 <a href="{% url "goods:book-create" %}"><button class="btn btn-warning">Добавить книгу</button></a><br>
-{% endif %}
+{% comment %} {% endif %} {% endcomment %}
 <table class="table table-hover" border="1">
     <tr>
         <th>Обложка</th>
@@ -42,16 +42,16 @@
         <td class="link">
             <a href="{% url "goods:book-detail" obj.id %}"><button class="btn btn-success"><i class="bi bi-eye"></i></button></a>
         </td>
-        {% if  perms.goods.change_book %}
+        {% comment %} {% if  perms.goods.change_book %} {% endcomment %}
             <td class="link">
                 <a href="{% url "goods:book-update" obj.id %}"><button class="btn btn-warning"><i class="bi bi-pencil-square"></i></button></a>
             </td>
-        {% endif %}
-        {% if  perms.goods.delete_book %}
+        {% comment %} {% endif %} {% endcomment %}
+        {% comment %} {% if  perms.goods.delete_book %} {% endcomment %}
         <td class="link">
             <a href="{% url "goods:book-delete" obj.id %}"><button class="btn btn-danger"><i class="bi bi-trash"></i></button></a>
         </td>
-        {% endif %}
+        {% comment %} {% endif %} {% endcomment %}
     </tr>
     {% endfor %}
 </table>

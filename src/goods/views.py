@@ -1,30 +1,52 @@
-from django.shortcuts import render
+from django.core.paginator import Paginator
+from django.shortcuts import get_list_or_404, render
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
+
+from goods.utils import q_search
 #from acc import views
 from . import models, forms
 
 # Create your views here.
-def catalog(request):
-    goods = models.Book.objects.all()
+def catalog(request, category_slug=None):
+    page = request.GET.get('page', 1)
+    on_sale = request.GET.get('on_sale', None)
+    order_by = request.GET.get('order_by', None)
+    query = request.GET.get('q', None)
+
+    if category_slug == 'all':
+        goods = models.Book.objects.all()
+    elif query:
+        goods = q_search(query)
+    else:
+        goods = get_list_or_404(models.Book.objects.filter(category__slug=category_slug))
+    
+    if on_sale:
+        goods = goods.filter(discount__gt=0)
+    if order_by and order_by != "default":
+        goods = goods.order_by(order_by)
+    
+    paginator = Paginator(goods, 9)
+    current_page = paginator.page(int(page))
     context = {
         'title': 'RED CAT - Каталог',
-        'goods': goods
+        'goods': current_page,
+        'slug_url': category_slug,
     }
     return render(request, 'goods/catalog.html', context=context)
 
 def product(request):
     return render(request, 'goods/product.html')
 
-class BookList(PermissionRequiredMixin, generic_views.ListView):
-    permission_required = ()
+class BookList(generic_views.ListView):
+    #permission_required = ()
     login_url = reverse_lazy("accounts:login")
     model = models.Book
 
 
-class BookCreate(PermissionRequiredMixin, generic_views.CreateView):
-    permission_required = "goods.add_book"
+class BookCreate(generic_views.CreateView):
+    #permission_required = "goods.add_book"
     model = models.Book
     login_url = reverse_lazy("accounts:login")
     success_url = reverse_lazy("accounts:profile")
@@ -58,13 +80,13 @@ class BookCreate(PermissionRequiredMixin, generic_views.CreateView):
         return context
 
 
-class BookDetail(PermissionRequiredMixin, generic_views.DetailView):
-    permission_required = ()
+class BookDetail(generic_views.DetailView):
+    #permission_required = ()
     model = models.Book
 
 
-class BookUpdate(PermissionRequiredMixin, generic_views.UpdateView):
-    permission_required = "goods.change_book"
+class BookUpdate(generic_views.UpdateView):
+    #permission_required = "goods.change_book"
     model = models.Book
     fields = [
         "category",
@@ -95,7 +117,7 @@ class BookUpdate(PermissionRequiredMixin, generic_views.UpdateView):
         return context
 
 
-class BookDelete(PermissionRequiredMixin, generic_views.DeleteView):
-    permission_required = "goods.delete_book"
+class BookDelete(generic_views.DeleteView):
+    #permission_required = "goods.delete_book"
     model = models.Book
     success_url = reverse_lazy("goods:book-list")
